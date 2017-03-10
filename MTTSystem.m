@@ -119,11 +119,12 @@ classdef MTTSystem
             o.currentstep_additionalinformation = additional_information;
         end
         
-        function [EOF, time, observations, additional_information] = get_GUI_step_information(o)
+        function [EOF, time, observations, additional_information, tracks] = get_GUI_step_information(o)
             EOF = o.currentstep_EOF;
             time = o.currentstep_time;
             observations = o.currentstep_observations;
             additional_information = o.currentstep_additionalinformation;
+            tracks = [o.MTT.list_of_tracks, o.MTT.list_of_inactive_tracks];
         end
         
         % run post processing, visualization, and reporting tasks according to the instructions in post_MTT_run_sequence
