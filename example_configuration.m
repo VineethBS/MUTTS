@@ -3,6 +3,8 @@
 dt = 0.1;
 
 dimension_observations = 3;
+observation_snr_limit = 8;
+observation_pointing_limit = [2; 2; 2];
 
 % parameters to be used for processing the input file with additional information
 % the additional information can be independent of the number of observations/detections, such as in the case of
@@ -18,6 +20,7 @@ inputfile_parameters.additional_information_fixedcols_columns = {2:4};
 inputfile_parameters.additional_information_varcols = {'snr'};
 inputfile_parameters.additional_information_num_varcols_perobs = 1;
 inputfile_parameters.additional_information_varcols_offsets = {4};
+
 
 % filter parameters for Kalman Filter
 filter_type = 'kalmanfilter';
@@ -81,6 +84,8 @@ visualization3D_parameters.filename_true = 'input_true.txt';
 visualization3D_parameters.plot_input_actual = 1;
 visualization3D_parameters.plot_input_true = 1;
 visualization3D_parameters.plot_tracks = 1;
+visualization3D_parameters.plot_tracks_predicted=0;
+visualization3D_parameters.get_error_plot=0;
 visualization3D_parameters.in_field_separator = ' ';
 visualization3D_parameters.plottype_input= 'r.';
 visualization3D_parameters.plottype_input_actual = 'r.';
@@ -98,6 +103,9 @@ metrics_parameters.omat_parameters.c=1000;
 metrics_parameters.original_tracks_file='input_true.txt';
 metrics_parameters.in_field_separator = ' ';
 metrics_parameters.dimension_observations = 3;
+metrics_parameters.convertcordinate = 0;%%%% 0 is no conversion. 1 means in and out are in rae and will be converted to xyz.  2 means in and out are in xyz and converted to rae
+
+
 
 post_MTT_run_sequence = {'atleastN','velocitythreshold','plot3D','computemetrics'};
 
