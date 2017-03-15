@@ -9,7 +9,9 @@ classdef HeuristicDataAssociation
             list_of_parameters_and_initial_values = [];
         end
         
-        
+        function o = set_dynamic_tunable_parameters(o, parameter_name, new_value)
+        end
+
         data_association_matrix = find_data_association(observations, o, list_of_tracks, gate_membership_matrix);
         
     end

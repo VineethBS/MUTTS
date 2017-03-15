@@ -69,5 +69,6 @@ classdef MultiTargetTracker
         o = process_one_observation(o, time, observations);
         o = process_multiple_observations(o, list_of_times, list_of_observations);
         list_of_parameters_and_initial_values = get_dynamic_tunable_parameters(o);
+        o = set_dynamic_tunable_parameters(o, parameter_name, new_value);
     end
 end

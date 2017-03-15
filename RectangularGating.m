@@ -21,6 +21,15 @@ classdef RectangularGating
             list_of_parameters_and_initial_values{end + 1} = {'gate_width', o.gate_width};
         end
             
+        function o = set_dynamic_tunable_parameters(o, parameter_name, new_value)
+            switch parameter_name
+                case 'gate_width'
+                    o.gate_width = double(new_value);
+                otherwise
+                    return
+            end
+        end
+        
         function gate_membership_matrix = find_gate_membership(o, observations, list_of_tracks)
             gate_membership_matrix = zeros(length(observations), length(list_of_tracks) + 1);
             num_of_observations = length(observations);

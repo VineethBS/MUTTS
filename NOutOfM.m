@@ -33,6 +33,24 @@ classdef NOutOfM
             list_of_parameters_and_initial_values{end + 1} = {'confirm_M', o.confirm_M};
             list_of_parameters_and_initial_values{end + 1} = {'confirm_N', o.confirm_N};
         end
+        
+        function o = set_dynamic_tunable_parameters(o, parameter_name, new_value)
+            switch parameter_name
+                case 'N'
+                    o.N = double(new_value);
+                case 'M'
+                    o.M = double(new_value);
+                case 'confirm_threshold'
+                    o.confirm_threshold = double(new_value);
+                case 'confirm_M'
+                    o.confirm_M = double(new_value);
+                case 'confirm_N'
+                    o.confirm_N = double(new_value);
+                otherwise
+                    return
+            end
+        end
+        
 
         function [active_tracks, inactive_tracks] = get_active_inactive_tracks(o, list_of_tracks)
             active_tracks = {};

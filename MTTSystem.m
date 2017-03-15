@@ -129,6 +129,10 @@ classdef MTTSystem
             list_of_parameters_and_initial_values = o.MTT.get_dynamic_tunable_parameters();
         end
         
+        function o = set_dynamic_tunable_parameters(o, parameter_name, new_value)
+            o.MTT = o.MTT.set_dynamic_tunable_parameters(o, parameter_name, new_value);
+        end
+        
         % In each step the GUI needs the following information from the MTT
         function [EOF, time, observations, additional_information, tracks] = get_GUI_step_information(o)
             EOF = o.currentstep_EOF;
