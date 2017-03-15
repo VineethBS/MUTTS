@@ -142,43 +142,11 @@ classdef MTTSystem
             additional_information = o.currentstep_additionalinformation;
             tracks = [o.MTT.list_of_tracks, o.MTT.list_of_inactive_tracks];
         end
-        
-        % run post processing, visualization, and reporting tasks according to the instructions in post_MTT_run_sequence
-        function o = post_MTT_run(o)
+        % get all tracks
+        function tracks = get_tracks(o)
             tracks = [o.MTT.list_of_tracks, o.MTT.list_of_inactive_tracks];
-            if(~isempty(tracks))
-                for i = 1:length(o.post_MTT_run_sequence)
-                    instruction = o.post_MTT_run_sequence{i};
-                    if strcmp(instruction, 'atleastN')
-                        temp = PostProcessing(o.post_MTT_run_parameters{i});
-                        tracks = temp.find_tracks_atleast_N_detections(tracks); % tracks change here
-                    elseif strcmp(instruction, 'velocitythreshold')
-                        if(~isempty(tracks))
-                            temp = PostProcessing(o.post_MTT_run_parameters{i});
-                            tracks = temp.find_tracks_velocity_threshold(tracks); % tracks change here
-                        end
-                    elseif strcmp(instruction, 'plot1D')
-                        if(~isempty(tracks))
-                            temp = Visualization(o.post_MTT_run_parameters{i});
-                            temp.plot_1D(tracks);
-                        end
-                    elseif strcmp(instruction, 'plot3D')
-                        temp = Visualization(o.post_MTT_run_parameters{i});
-                        temp.plot_3D(tracks);
-                    elseif strcmp(instruction, 'savetracks')
-                        if(~isempty(tracks))
-                            temp = Reporting(o.post_MTT_run_parameters{i});
-                            temp.save_tracks(tracks);
-                        end
-                    elseif strcmp(instruction, 'computemetrics')
-                        if(~isempty(tracks))
-                            temp = Metrics(o.post_MTT_run_parameters{i});
-                            temp.compute_metrics(tracks);
-                        end
-                    end
-                end
-            end
         end
+       
     end
 end
 

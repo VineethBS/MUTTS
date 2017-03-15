@@ -1,6 +1,9 @@
 #!/bin/bash
 while $(true);
 do
-	cp MUTTS.fig MUTTS.fig.bk
+	for i in $(ls *.fig);
+	do
+		cp $i $i.bk
+	done
 	sleep 5;
 done

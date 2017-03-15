@@ -13,8 +13,7 @@ observations_from_tracks = [];
 
 for i = 1:length(tracks)
     current_track = tracks{i};
-%     for j = 1:length(current_track.sequence_times_observations)
-     for j = 1:length(current_track.sequence_times)
+    for j = 1:length(current_track.sequence_times)
         current_track_time = current_track.sequence_times(j);
         current_track_observations = current_track.sequence_updated_state{j};
         
@@ -74,42 +73,42 @@ while 1
     [~,o.n_outtargets(end + 1)] = size(track_observations_matrix);
     
     %%% raghava for finding metric in xyz cordinates
-    if o.dimension_observations ==3
-         if o.convertcordinate == 1
-             
-             for i = 1:o.n_intargets(end)
-                 %%%% [x,y,z] = sph2cart(a,e,r)
-                 [observations_matrix(1,i),observations_matrix(2,i),observations_matrix(3,i)] = sph2cart(observations_matrix(2,i),observations_matrix(3,i),observations_matrix(1,i));
-             end
-             
-             for i = 1:o.n_outtargets(end)
-                 %%%% [x,y,z] = sph2cart(a,e,r)
-                 [track_observations_matrix(1,i),track_observations_matrix(2,i),track_observations_matrix(3,i)] = sph2cart(track_observations_matrix(2,i),track_observations_matrix(3,i),track_observations_matrix(1,i));
-             end
-             
-         end
+    if o.dimension_observations == 3
+        if o.convertcordinate == 1
+            
+            for i = 1:o.n_intargets(end)
+                %%%% [x,y,z] = sph2cart(a,e,r)
+                [observations_matrix(1,i),observations_matrix(2,i),observations_matrix(3,i)] = sph2cart(observations_matrix(2,i),observations_matrix(3,i),observations_matrix(1,i));
+            end
+            
+            for i = 1:o.n_outtargets(end)
+                %%%% [x,y,z] = sph2cart(a,e,r)
+                [track_observations_matrix(1,i),track_observations_matrix(2,i),track_observations_matrix(3,i)] = sph2cart(track_observations_matrix(2,i),track_observations_matrix(3,i),track_observations_matrix(1,i));
+            end
+            
+        end
     end
     
     %%% raghava for finding metric in rae cordinates
     if o.dimension_observations ==3
-         if o.convertcordinate == 2
-             
-             for i = 1:o.n_intargets(end)
-                 %%%%[a,e,r] = cart2sph(x,y,z);
-                 [observations_matrix(2,i),observations_matrix(3,i),observations_matrix(1,i)] = sph2cart(observations_matrix(1,i),observations_matrix(2,i),observations_matrix(3,i));
-                 %%%%%observations_matrix r a e
-             end
-             
-             for i = 1:o.n_outtargets(end)
-                 %%%%[a,e,r] = cart2sph(x,y,z);
-                 [track_observations_matrix(2,i),track_observations_matrix(3,i),track_observations_matrix(1,i)] = sph2cart(track_observations_matrix(1,i),track_observations_matrix(2,i),track_observations_matrix(3,i));
-             end
-             
-         end
+        if o.convertcordinate == 2
+            
+            for i = 1:o.n_intargets(end)
+                %%%%[a,e,r] = cart2sph(x,y,z);
+                [observations_matrix(2,i),observations_matrix(3,i),observations_matrix(1,i)] = sph2cart(observations_matrix(1,i),observations_matrix(2,i),observations_matrix(3,i));
+                %%%%%observations_matrix r a e
+            end
+            
+            for i = 1:o.n_outtargets(end)
+                %%%%[a,e,r] = cart2sph(x,y,z);
+                [track_observations_matrix(2,i),track_observations_matrix(3,i),track_observations_matrix(1,i)] = sph2cart(track_observations_matrix(1,i),track_observations_matrix(2,i),track_observations_matrix(3,i));
+            end
+            
+        end
     end
     if o.compute_ospa
-       dist = o.find_ospa_metric(observations_matrix, track_observations_matrix, o.ospa_parameters.c, o.ospa_parameters.p);
-       o.ospa_metric(end + 1) = dist;
+        dist = o.find_ospa_metric(observations_matrix, track_observations_matrix, o.ospa_parameters.c, o.ospa_parameters.p);
+        o.ospa_metric(end + 1) = dist;
     end
     
     if o.compute_omat

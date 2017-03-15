@@ -23,10 +23,17 @@ classdef Metrics
         average_ospa_metric;
         average_omat_metric;
         average_hausdorff_metric;
+        
+        n_intargets;
+        n_outtargets;
+        convert_coordinate;
     end
     
     methods
         function o = Metrics(parameters)
+            o.n_intargets = [];
+            o.n_outtargets = [];
+            
             o.original_tracks_file = parameters.original_tracks_file;
             o.in_field_separator = parameters.in_field_separator;
             o.dimension_observations = parameters.dimension_observations;

@@ -2,7 +2,7 @@ function varargout = MUTTS(varargin)
 % MUTTS
 % MUlti Target Tracking Simulator
 
-% Last Modified by GUIDE v2.5 15-Mar-2017 12:26:18
+% Last Modified by GUIDE v2.5 15-Mar-2017 14:48:17
 
 gui_Singleton = 0;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -242,4 +242,46 @@ if handles.experiment_pause
     handles.table_data{row, 2} = eventdata.NewData;
     handles.experiment = handles.experiment.set_dynamic_tunable_parameters(handles.table_data{row, 1}, handles.table_data{row, 2});
     guidata(hObject, handles);
+end
+
+
+% --------------------------------------------------------------------
+function menu_metrics_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_metrics (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function menu_tracks_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_tracks (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function menu_tracks_save_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_tracks_save (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function menu_metrics_configure_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_metrics_configure (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles = guidata(hObject);
+handles.Metric = MUTTS_MetricsConfigure;
+guidata(hObject, handles);
+
+% --------------------------------------------------------------------
+function menu_metrics_plot_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_metrics_plot (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles = guidata(hObject);
+if (handles.configuration_file_chosen == 1) && (handles.data_file_chosen == 1) && (handles.experiment_pause)
+    tracks = handles.experiment.get_tracks();
+    handles.Metric.compute_metrics(tracks);
 end
