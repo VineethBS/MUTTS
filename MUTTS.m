@@ -74,6 +74,7 @@ if (handles.configuration_file_chosen == 1) && (handles.data_file_chosen == 1)
             continue;
         end
         handles.experiment = handles.experiment.run();
+        guidata(hObject, handles);
         [EOF, time, observations, additional_information, tracks] = handles.experiment.get_GUI_step_information();
         if EOF == -1
             return;
@@ -223,7 +224,7 @@ function menu_help_about_Callback(hObject, eventdata, handles)
 % hObject    handle to menu_help_about (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+MUTTS_SS;
 
 % --- Executes when entered data in editable cell(s) in table_parametertuning.
 function table_parametertuning_CellEditCallback(hObject, eventdata, handles)
@@ -236,7 +237,9 @@ function table_parametertuning_CellEditCallback(hObject, eventdata, handles)
 %	Error: error string when failed to convert EditData to appropriate value for Data
 % handles    structure with handles and user data (see GUIDATA)
 handles = guidata(hObject);
-row = eventdata.Indices(1); % column in 2 by design
-handles.table_data{row, 2} = eventdata.NewData;
-handles.experiment = handles.experiment.set_dynamic_tunable_parameters(handles.table_data{row, 1}, handles.table_data{row, 2});
-guidata(hObject, handles);
+if handles.experiment_pause
+    row = eventdata.Indices(1); % column in 2 by design
+    handles.table_data{row, 2} = eventdata.NewData;
+    handles.experiment = handles.experiment.set_dynamic_tunable_parameters(handles.table_data{row, 1}, handles.table_data{row, 2});
+    guidata(hObject, handles);
+end

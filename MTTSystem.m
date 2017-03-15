@@ -39,6 +39,7 @@ classdef MTTSystem
             o.post_MTT_run_sequence = post_MTT_run_sequence;
             o.post_MTT_run_parameters = post_MTT_run_parameters;
             
+            o.MTT.use_additional_information = use_additional_information;
             o.MTT.observation_snr_limit = observation_snr_limit;
             o.MTT.observation_pointing_limit = observation_pointing_limit;
         end
@@ -130,7 +131,7 @@ classdef MTTSystem
         end
         
         function o = set_dynamic_tunable_parameters(o, parameter_name, new_value)
-            o.MTT = o.MTT.set_dynamic_tunable_parameters(o, parameter_name, new_value);
+            o.MTT = o.MTT.set_dynamic_tunable_parameters(parameter_name, new_value);
         end
         
         % In each step the GUI needs the following information from the MTT
