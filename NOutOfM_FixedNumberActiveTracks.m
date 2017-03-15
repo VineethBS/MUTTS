@@ -27,6 +27,16 @@ classdef NOutOfM_FixedNumberActiveTracks
             o.max_number_active_tracks = track_maintenance_parameters.max_number_active_tracks;
         end
         
+        function list_of_parameters_and_initial_values = get_dynamic_tunable_parameters(o)
+            list_of_parameters_and_initial_values = [];
+            list_of_parameters_and_initial_values{end + 1} = {'N', o.N};
+            list_of_parameters_and_initial_values{end + 1} = {'M', o.M};
+            list_of_parameters_and_initial_values{end + 1} = {'confirm_threshold', o.confirm_threshold};
+            list_of_parameters_and_initial_values{end + 1} = {'confirm_M', o.confirm_M};
+            list_of_parameters_and_initial_values{end + 1} = {'confirm_N', o.confirm_N};
+            list_of_parameters_and_initial_values{end + 1} = {'max_number_active_tracks', o.max_number_active_tracks};
+        end
+
         function [active_tracks, inactive_tracks] = get_active_inactive_tracks(o, list_of_tracks)
             active_new_tracks = {};
             active_tracks = {};

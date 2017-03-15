@@ -39,6 +39,11 @@ classdef KalmanFilter
             o.state = o.predicted_state + o.kalman_gain * (observation - o.C * o.predicted_state);
             o.covariance = o.predicted_covariance - o.kalman_gain * o.C * o.predicted_covariance;
         end
+        function o = update_with_noobservation(o, time)
+            %o.kalman_gain = o.predicted_covariance * o.C' * inv(o.C * o.predicted_covariance * o.C' + o.R);
+            o.state = o.predicted_state ;
+            o.covariance = o.predicted_covariance;
+        end
         
         % state update for multiple observations; each observation is associated with a probability
         % observations is a cell array of the set of observations to be used to update the filter

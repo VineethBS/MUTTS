@@ -25,6 +25,15 @@ classdef NOutOfM
             o.confirm_M = track_maintenance_parameters.confirm_M;
         end
         
+        function list_of_parameters_and_initial_values = get_dynamic_tunable_parameters(o)
+            list_of_parameters_and_initial_values = [];
+            list_of_parameters_and_initial_values{end + 1} = {'N', o.N};
+            list_of_parameters_and_initial_values{end + 1} = {'M', o.M};
+            list_of_parameters_and_initial_values{end + 1} = {'confirm_threshold', o.confirm_threshold};
+            list_of_parameters_and_initial_values{end + 1} = {'confirm_M', o.confirm_M};
+            list_of_parameters_and_initial_values{end + 1} = {'confirm_N', o.confirm_N};
+        end
+
         function [active_tracks, inactive_tracks] = get_active_inactive_tracks(o, list_of_tracks)
             active_tracks = {};
             inactive_tracks = {};

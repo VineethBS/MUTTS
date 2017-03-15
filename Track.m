@@ -11,7 +11,7 @@ classdef Track
         sequence_predicted_observations; % the observations predicted by the internal state
         sequence_updated_state;% filtered output values
         state;% to determine is early stage or inactive or active
-        sequence_times_not_observed; % to determine whether the radar was pointed somewhere else
+        sequence_times_notobserved; % to determine whether the radar was pointed somewhere else
     end
     
     methods

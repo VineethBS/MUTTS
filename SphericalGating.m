@@ -10,6 +10,11 @@ classdef SphericalGating
             o.gate_radius = parameters.gate_radius;
         end
         
+        function list_of_parameters_and_initial_values = get_dynamic_tunable_parameters(o)
+            list_of_parameters_and_initial_values = [];
+            list_of_parameters_and_initial_values{end + 1} = {'gate_radius', o.gate_radius};
+        end
+        
         function gate_membership_matrix = find_gate_membership(o, observations, list_of_tracks)
             gate_membership_matrix = zeros(length(observations), length(list_of_tracks) + 1);
             num_of_observations = length(observations);

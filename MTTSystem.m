@@ -7,10 +7,16 @@ classdef MTTSystem
         inputfile_parameters; % contains information about the formatting of the input file
         configuration_file; % string
         data_file; % string
-        MTT; % MTT 
+        MTT; % MTT
         dimension_observations; % int
         post_MTT_run_sequence;
         post_MTT_run_parameters;
+        filehandle;
+        
+        currentstep_time;
+        currentstep_observations;
+        currentstep_additionalinformation;
+        currentstep_EOF;
     end
     
     methods
@@ -24,42 +30,41 @@ classdef MTTSystem
                 error('%s does not exist!', o.configuration_file);
                 return;
             end
-                
+            
             % initialize the Multi Target Tracker object with the configuration parameters
             o.MTT = MultiTargetTracker(filter_type, filter_parameters, gating_method_type, gating_method_parameters, ...
-                                       data_association_type, data_association_parameters, track_maintenance_type, track_maintenance_parameters);
+                data_association_type, data_association_parameters, track_maintenance_type, track_maintenance_parameters);
             o.dimension_observations = dimension_observations;
             o.inputfile_parameters = inputfile_parameters;
             o.post_MTT_run_sequence = post_MTT_run_sequence;
             o.post_MTT_run_parameters = post_MTT_run_parameters;
-
-	    o.MTT.observation_snr_limit = observation_snr_limit;
+            
+            o.MTT.observation_snr_limit = observation_snr_limit;
             o.MTT.observation_pointing_limit = observation_pointing_limit;
+        end
+        
+        % Since MTT is run from the GUI, we need to make the file handle persistent across calls
+        function o = initialize_filehandle(o)
+            if exist(o.data_file, 'file') == 2
+                o.filehandle = fopen(o.data_file);
+            else
+                error('%s does not exist!', o.data_file);
+                return
+            end
         end
         
         % run - simulates the step by step running of the multi targets tracker. It reads the data file line by line. Each line is a
         % sequence of detections, each detection being again a sequence of co-ordinates. For example, 2 detections each with 3 co-ordinates
         % would look like 10,20,30,10,20,30 which correspond to (10,20,30) and (10,20,30).
         function o = run(o)
-            if exist(o.data_file, 'file') == 2
-                fh = fopen(o.data_file);
-            else
-                error('%s does not exist!', o.data_file);
-                return
+            o.currentstep_EOF = 1;
+            line = fgetl(o.filehandle);
+            if ~ischar(line)
+                o.currentstep_EOF = -1;
+                return;
             end
-            while 1
-                line = fgetl(fh);
-                if ~ischar(line)
-                    break;
-                end
-                tokens = strsplit(line, o.inputfile_parameters.field_separator);
-                o = o.run_once(tokens);
-            end
-        end
-        
-        % run_once - for each line that is read in, converts the obtained tokens to time and numeric tokens, makes a cell array of
-        % observations with each element of the cell being an observation and runs the MTT tracker with this observation object.
-        function o = run_once(o, tokens)
+            
+            tokens = strsplit(line, o.inputfile_parameters.field_separator);
             numeric_tokens = zeros(1, length(tokens));
             for i = 1:length(tokens)
                 numeric_tokens(i) = str2double(tokens{i});
@@ -80,7 +85,7 @@ classdef MTTSystem
             % ---- Find all the observations and additional information from the line and arrange in an array
             observation_and_info_numeric_tokens = numeric_tokens(o.inputfile_parameters.observation_column_start:end);
             
-            % If the number of numeric tokens is not a multiple of dimension_observations and the number of variable columns per 
+            % If the number of numeric tokens is not a multiple of dimension_observations and the number of variable columns per
             % observation then continue on to the next line
             dimension_per_observation_and_info = o.dimension_observations + o.inputfile_parameters.additional_information_num_varcols_perobs;
             if mod(length(observation_and_info_numeric_tokens), dimension_per_observation_and_info) ~= 0
@@ -110,10 +115,27 @@ classdef MTTSystem
             end
             
             % ---- Now call the MTT's process one observation
-		o.MTT.additional_information = additional_information;
-                o.MTT = o.MTT.process_one_observation(time, observations);
-
-		% o.MTT = o.MTT.process_one_observation(time, observations, additional_information);
+            o.MTT.additional_information = additional_information;
+            o.MTT = o.MTT.process_one_observation(time, observations);
+            
+            % ---- Set variables to be used by the GUI
+            o.currentstep_time = time;
+            o.currentstep_observations = observations;
+            o.currentstep_additionalinformation = additional_information;
+        end
+        
+        % Get the list of parameters which can be tuned while the simulation is running
+        function list_of_parameters_and_initial_values = get_dynamic_tunable_parameters(o)
+            list_of_parameters_and_initial_values = o.MTT.get_dynamic_tunable_parameters();
+        end
+        
+        % In each step the GUI needs the following information from the MTT
+        function [EOF, time, observations, additional_information, tracks] = get_GUI_step_information(o)
+            EOF = o.currentstep_EOF;
+            time = o.currentstep_time;
+            observations = o.currentstep_observations;
+            additional_information = o.currentstep_additionalinformation;
+            tracks = [o.MTT.list_of_tracks, o.MTT.list_of_inactive_tracks];
         end
         
         % run post processing, visualization, and reporting tasks according to the instructions in post_MTT_run_sequence

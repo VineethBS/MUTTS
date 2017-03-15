@@ -14,10 +14,13 @@ classdef RectangularGating
         function o = RectangularGating(parameters, filter_type)
             o.gate_width = parameters.gate_width;
             o.filter_type=filter_type;
-           
         end
         
-        
+        function list_of_parameters_and_initial_values = get_dynamic_tunable_parameters(o)
+            list_of_parameters_and_initial_values = [];
+            list_of_parameters_and_initial_values{end + 1} = {'gate_width', o.gate_width};
+        end
+            
         function gate_membership_matrix = find_gate_membership(o, observations, list_of_tracks)
             gate_membership_matrix = zeros(length(observations), length(list_of_tracks) + 1);
             num_of_observations = length(observations);
