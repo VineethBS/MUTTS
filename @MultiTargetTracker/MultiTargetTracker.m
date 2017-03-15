@@ -17,6 +17,7 @@ classdef MultiTargetTracker
         list_of_tracks;
         list_of_inactive_tracks;
         
+        use_additional_information;
         additional_information;
         observation_snr_limit;
         observation_pointing_limit;
