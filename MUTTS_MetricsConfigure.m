@@ -78,9 +78,10 @@ function varargout = MUTTS_MetricsConfigure_OutputFcn(hObject, eventdata, handle
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+handles = guidata(hObject);
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
+delete(handles.figure_metrics_configure);
 
 % --- Executes on button press in button_choose_originaltracks.
 function button_choose_originaltracks_Callback(hObject, eventdata, handles)
@@ -196,6 +197,9 @@ function button_ok_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 handles = guidata(hObject);
+handles.output = 0;
+guidata(hObject, handles);
+
 if handles.original_file_chosen
     parameters.original_tracks_file = handles.original_file;
     parameters.in_field_separator = get(handles.edit_separator, 'String');
@@ -210,7 +214,7 @@ if handles.original_file_chosen
     temp = Metrics(parameters);
     handles.output = temp;
     guidata(hObject, handles);
-    uiresume();
+    uiresume(handles.figure_metrics_configure);
 end
 
 % --- Executes on button press in button_cancel.
@@ -218,8 +222,9 @@ function button_cancel_Callback(hObject, eventdata, handles)
 % hObject    handle to button_cancel (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-close(gcf);
-
+handles.output = 0;
+guidata(hObject, handles);
+uiresume(handles.figure_metrics_configure);
 
 % --- Executes when user attempts to close figure_metrics_configure.
 function figure_metrics_configure_CloseRequestFcn(hObject, eventdata, handles)
@@ -228,8 +233,7 @@ function figure_metrics_configure_CloseRequestFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: delete(hObject) closes the figure
-delete(hObject);
-
+delete(handles.figure_metrics_configure);
 
 
 function edit_separator_Callback(hObject, eventdata, handles)
