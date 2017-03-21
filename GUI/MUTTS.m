@@ -2,7 +2,7 @@ function varargout = MUTTS(varargin)
 % MUTTS
 % MUlti Target Tracking Simulator
 
-% Last Modified by GUIDE v2.5 15-Mar-2017 14:48:17
+% Last Modified by GUIDE v2.5 21-Mar-2017 17:45:14
 
 gui_Singleton = 0;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -23,6 +23,7 @@ end
 
 % --- Executes just before MUTTS is made visible.
 function MUTTS_OpeningFcn(hObject, eventdata, handles, varargin)
+addpath ..;
 handles.output = hObject;
 % Update handles structure
 handles.stepdelay = 1;
@@ -170,7 +171,9 @@ function button_configure_metrics_Callback(hObject, eventdata, handles)
 % hObject    handle to button_configure_metrics (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+handles = guidata(hObject);
+handles.Metric = MUTTS_MetricsConfigure;
+guidata(hObject, handles);
 
 % --- Executes on button press in button_configure_data_association.
 function button_configure_data_association_Callback(hObject, eventdata, handles)
@@ -184,14 +187,14 @@ function button_configure_gating_Callback(hObject, eventdata, handles)
 % hObject    handle to button_configure_gating (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+gate_parameters = MUTTS_GatingConfigure;
 
 % --- Executes on button press in button_configure_track_maintenance.
 function button_configure_track_maintenance_Callback(hObject, eventdata, handles)
 % hObject    handle to button_configure_track_maintenance (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+trackmaintenance_parameters = MUTTS_TrackMaintenanceConfigure;
 
 % --- Executes on button press in button_configure_filtering.
 function button_configure_filtering_Callback(hObject, eventdata, handles)
@@ -208,7 +211,6 @@ function button_viewconfiguration_Callback(hObject, eventdata, handles)
 if get(handles.radio_loadfromfile, 'Value') == 0
     return;
 end
-
 edit(handles.configuration_file);
 
 
@@ -285,3 +287,32 @@ if (handles.configuration_file_chosen == 1) && (handles.data_file_chosen == 1) &
     tracks = handles.experiment.get_tracks();
     handles.Metric.compute_metrics(tracks);
 end
+
+
+% --- Executes on button press in button_postprocessconfigure.
+function button_postprocessconfigure_Callback(hObject, eventdata, handles)
+% hObject    handle to button_postprocessconfigure (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+postprocessing_parameters = MUTTS_PostProcessingConfigure;
+
+
+% --------------------------------------------------------------------
+function menu_configuration_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_configuration (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function menu_config_load_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_config_load (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function menu_config_save_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_config_save (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
