@@ -65,19 +65,22 @@ properties = properties.GetHierarchy();
 f = figure;
 set(f, 'ToolBar', 'none', 'MenuBar', 'none', 'Name', 'Configure gating parameters');
 set(f, 'numbertitle', 'off', 'Position', [0, 0, 300, 490], 'Resize', 'off');
-% panel = uipanel(f);
+
+panel_choice = uipanel(f);
+panel = uipanel(f);
+panel_buttons = uipanel(f);
 
 % Add to the main figure
-choice = uibuttongroup('Parent', f, 'Title', 'Choose gating method type');
+choice = uibuttongroup('Parent', panel_choice, 'Title', 'Choose gating method type');
 alphabeta_choice = uicontrol('Parent', choice, 'Style', 'radiobutton', 'String', 'Alpha Beta Filter', 'Position', [2, 430, 220, 30]);
 kalman_choice = uicontrol('Parent', choice, 'Style', 'radiobutton', 'String', 'Kalman Filter', 'Position', [2, 400, 220, 30]);
 ekf_choice = uicontrol('Parent', choice, 'Style', 'radiobutton', 'String', 'Extended Kalman Filter', 'Position', [2, 370, 220, 30]);
 
 % Prepare a properties table containing the list
-grid = PropertyGrid(f, 'Properties', properties, 'Position', [10, 50, 250, 450]);
+grid = PropertyGrid(panel, 'Properties', properties);
 
-button_ok = uicontrol('Parent', f, 'Style', 'pushbutton', 'String', 'Ok', 'Position', [90, 10, 70, 30], 'Callback', @button_ok_Callback);
-button_cancel = uicontrol('Parent', f, 'Style', 'pushbutton', 'String', 'Cancel', 'Position', [160, 10, 70, 30], 'Callback', @button_cancel_Callback);
+button_ok = uicontrol('Parent', panel_buttons, 'Style', 'pushbutton', 'String', 'Ok', 'Position', [90, 10, 70, 30], 'Callback', @button_ok_Callback);
+button_cancel = uicontrol('Parent', panel_buttons, 'Style', 'pushbutton', 'String', 'Cancel', 'Position', [160, 10, 70, 30], 'Callback', @button_cancel_Callback);
 
 movegui(f, 'center');
 

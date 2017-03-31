@@ -1,6 +1,8 @@
 classdef MUTTS_Configuration
     properties
         default_filename;
+        configuration_file;
+        configuration_file_chosen;
         
         dt;
         dimension_observations;
@@ -43,11 +45,11 @@ classdef MUTTS_Configuration
             o.default_filename = default_filename;
         end
         
-        function o = load_default_configuration(o)
-            if exist(o.default_filename, 'file') == 2
-                run(o.default_filename); % this will populate the local workspace with the configuration variables that we need
+        function o = internal_load_from_file(o, filename)
+            if exist(filename, 'file') == 2
+                run(filename); % this will populate the local workspace with the configuration variables that we need
             else
-                error('%s does not exist!', o.default_filename);
+                error('%s does not exist!', filename);
                 return;
             end
             o.dt = dt;
@@ -68,6 +70,33 @@ classdef MUTTS_Configuration
             o.metrics_parameters = metrics_parameters;
             o.atleastN_parameters = atleastN_parameters;
             o.velocitythreshold_parameters = velocitythreshold_parameters;
+        end
+        
+        function o = load_default_configuration(o)
+            o = o.internal_load_from_file(o.default_filename);
+        end
+        
+        function o = load_from_file(o)
+            [configuration_file, configuration_path] = uigetfile('*.m', 'Choose Configuration File');
+
+            if ~(isequal(configuration_file, 0))
+                o.configuration_file = fullfile(configuration_path, configuration_file);
+                o.configuration_file_chosen = 1;
+                o = o.internal_load_from_file(o.configuration_file);
+            end
+        end
+        
+        function o = configure(o, block)
+            switch block
+                case 'dataassociation'
+                    o = configure_dataassociation(o);
+                case 'filter'
+                    o = configure_filter(o);
+                case 'gating'
+                    o = configure_gating(o);
+                case 'trackmaintenance'
+                    o = configure_trackmaintenance(o);
+            end
         end
     end    
 end

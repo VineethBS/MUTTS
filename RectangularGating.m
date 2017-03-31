@@ -13,7 +13,7 @@ classdef RectangularGating
     methods
         function o = RectangularGating(parameters, filter_type)
             o.gate_width = parameters.gate_width;
-            o.filter_type=filter_type;
+            o.filter_type = filter_type;
         end
         
         function list_of_parameters_and_initial_values = get_dynamic_tunable_parameters(o)

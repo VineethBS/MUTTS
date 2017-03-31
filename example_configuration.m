@@ -66,7 +66,6 @@ track_maintenance_parameters.confirm_threshold = 5;
 track_maintenance_parameters.confirm_M = 5;
 track_maintenance_parameters.confirm_N = 1;
 
-
 track_maintenance_type = 'NOutOfM_FixedNumber';
 track_maintenance_parameters.N = 1;
 track_maintenance_parameters.M = 21;
